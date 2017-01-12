@@ -1,5 +1,5 @@
 # Simple-Shell
-A simple shell program Built in C.
 
-Compile with
-`$ cc -lreadline main.c -o shell`
+Used lsh tutorial to get started (https://brennan.io/2015/01/16/write-a-shell-in-c/).
+
+Gonna make some cool commands soon.

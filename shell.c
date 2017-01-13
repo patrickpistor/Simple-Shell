@@ -14,6 +14,7 @@
  */
 int pshell_cd(char **args);
 int pshell_help(char **args);
+int pshell_disp(char **args);
 int pshell_exit(char **args);
 
 /*
@@ -21,13 +22,15 @@ int pshell_exit(char **args);
  */
 char *builtin_str[] = {
     "cd",
-    "help",
+    "Help",
+    "Disp",
     "exit"
 };
 
 int (*builtin_func[]) (char **) = {
     &pshell_cd,
     &pshell_help,
+    &pshell_disp,
     &pshell_exit
 };
 
@@ -38,6 +41,29 @@ int pshell_num_builtins() {
 /*
  Builtin function implementations.
  */
+
+/**
+ @brief Bultin command: Prints output to the terminal
+ @param args List of args. arg1 is Disp and the rest are the text to print
+ @return Always returns 1, to continue executing.
+ 
+ TODO: Add the quotations and making statements like Disp "Hello World" & " " & "Test"
+ */
+int pshell_disp(char **args) {
+    int i;
+
+    if (args[1] == NULL) {
+        fprintf(stderr, "pshell: expected argument after Disp");
+    } else {
+        for(i = 1; i < sizeof(args); i++) {
+            if(!(args[i] == NULL)) {
+                printf("%s ", args[i]);
+            }
+        }
+        printf("\n");
+    }
+    return 1;
+}
 
 /**
  @brief Bultin command: change directory.
@@ -69,8 +95,6 @@ int pshell_help(char **args) {
     for (i = 0; i < pshell_num_builtins(); i++) {
         printf("  %s\n", builtin_str[i]);
     }
-    
-    printf("Use the man command for information on other programs.\n");
     return 1;
 }
 
@@ -221,7 +245,7 @@ void pshell_loop(void) {
     int status;
     
     do {
-        printf("> ");
+        printf(":");
         line = pshell_read_line();
         args = pshell_split_line(line);
         status = pshell_execute(args);
